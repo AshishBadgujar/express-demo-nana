@@ -16,7 +16,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
-                 nodejs("16.11.0"){
+                 nodejs("NodeJS 16.11.0"){
                     sh 'cd app/'
                     sh 'npm test'
                 }
