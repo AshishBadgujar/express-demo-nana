@@ -6,11 +6,20 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'trigger on commit Building..'
+                nodejs("16.11.0"){
+                    sh 'cd app/'
+                    sh 'npm install'
+                    sh 'npm build'
+                }
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing..'
+                 nodejs("16.11.0"){
+                    sh 'cd app/'
+                    sh 'npm test'
+                }
             }
         }
         stage('Deploy') {
