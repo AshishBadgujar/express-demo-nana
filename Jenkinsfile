@@ -6,7 +6,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'trigger on commit Building..'
-                nodejs("Node-16.11.0"){
+                nodejs("NodeJS 16.11.0"){
                     sh 'cd app/'
                     sh 'npm install'
                     sh 'npm build'
