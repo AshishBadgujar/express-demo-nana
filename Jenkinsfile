@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                echo 'trigger on commit Building..'
             }
         }
         stage('Test') {
