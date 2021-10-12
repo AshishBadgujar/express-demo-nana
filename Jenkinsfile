@@ -5,21 +5,17 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'trigger on commit Building..'
                 nodejs('Node-16.11.0'){
                     sh 'cd app/'
                     sh 'npm install'
                     sh 'npm build'
                 }
+                 echo 'Building..'
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing..'
-                 nodejs('Node-16.11.0'){
-                    sh 'cd app/'
-                    sh 'npm test'
-                }
             }
         }
         stage('Deploy') {
