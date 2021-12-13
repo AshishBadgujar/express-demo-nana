@@ -2,13 +2,15 @@ let express = require('express');
 let path = require('path');
 let fs = require('fs');
 let MongoClient = require('mongodb').MongoClient;
-
+let bodyParser = require('body-parser');
 let app = express();
 
-app.use(express.json())
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
-  process.exit(0);
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
@@ -19,7 +21,7 @@ app.get('/profile-picture', function (req, res) {
 });
 
 // use when starting application locally
-let mongoUrlLocal = "mongodb://admin:password@localhost:27017";
+let mongoUrlLocal = "mongodb://localhost:27017";
 
 // use when starting application as docker container
 let mongoUrlDocker = "mongodb://admin:password@mongodb";
@@ -55,7 +57,7 @@ app.post('/update-profile', function (req, res) {
 app.get('/get-profile', function (req, res) {
   let response = {};
   // Connect to the db
-  MongoClient.connect(mongoUrlDocker, mongoClientOptions, function (err, client) {
+  MongoClient.connect(mongoUrlLocal, mongoClientOptions, function (err, client) {
     if (err) throw err;
 
     let db = client.db(databaseName);
