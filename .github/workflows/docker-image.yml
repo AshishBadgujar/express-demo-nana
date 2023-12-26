@@ -1,0 +1,23 @@
+name: dockerHub Deploy
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    name: Build & push image
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - name: Build the docker image
+        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/express-app:7.0
+      - name: docker push
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/express-app:7.0
