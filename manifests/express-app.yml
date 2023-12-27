@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: express-app
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: express-app
@@ -12,6 +12,13 @@ spec:
       labels:
         app: express-app
     spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: express-app
       containers:
         - name: express-app
           image: express-app:latest
@@ -34,24 +41,27 @@ spec:
                 secretKeyRef:
                   name: mongodb-secret
                   key: mongo-root-password
-      # affinity:
-      #   podAntiAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #       - labelSelector:
-      #           matchExpressions:
-      #             - key: app
-      #               operator: In
-      #               values:
-      #                 - express-app
-      #         topologyKey: "topology.kubernetes.io/zone"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: express-app-service
+  name: express-app-service-0
 spec:
   selector:
     app: express-app
+    pod-index: "0"
+  ports:
+    - port: 3000
+      targetPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: express-app-service-1
+spec:
+  selector:
+    app: express-app
+    pod-index: "1"
   ports:
     - port: 3000
       targetPort: 3000

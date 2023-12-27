@@ -68,3 +68,55 @@ Step 5: access the nodejs application from browser
     docker build -t my-app:1.0 .       
     
 The dot "." at the end of the command denotes location of the Dockerfile.
+
+
+### With Kubernetes
+
+#### To start the application
+
+Step 1: Create a kubernetes cluster with 1 controlplane and 2 workers
+
+    kind create cluster --config kind-config.yaml 
+
+Step 2: Setup nginx ingress in kind cluster
+
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml    
+
+Step 3: Build experss-app container locally
+    
+    docker build -t express-app:latest .   
+
+Step 4: Load local docker image in kind cluster all nodes to make it accessible to the pods
+
+    kind load docker-image express-app:latest
+
+Step 5: Apply all manifest files it will create following:
+
+    kubectl apply -f ./manifests/
+
+- express-app deployment & it's service 
+- mongo-express deployment
+- mongodb statefulset & it's service
+- network policy
+- ingress
+- persistent volume 
+- persistent volume claim
+- configmap
+- secret
+
+Step 7: Setup Domain names locally
+
+Open powershell(Administrator) run below command :
+
+    notepad C:\Windows\system32\drivers\etc\hosts
+
+Add following entries in the file
+
+    127.0.0.1   express.com
+    127.0.0.1   mongo.com
+
+Step 7: Access you nodejs application UI from browser
+
+    http://express.com
+    http://mongo.com
+

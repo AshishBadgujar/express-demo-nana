@@ -8,14 +8,24 @@ metadata:
   #   nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: express.com
+    - host: express.us.com
       http:
         paths:
           - pathType: ImplementationSpecific
             path: /
             backend:
               service:
-                name: express-app-service
+                name: express-app-service-0
+                port:
+                  number: 3000
+    - host: express.in.com
+      http:
+        paths:
+          - pathType: ImplementationSpecific
+            path: /
+            backend:
+              service:
+                name: express-app-service-1
                 port:
                   number: 3000
     - host: mongo.com

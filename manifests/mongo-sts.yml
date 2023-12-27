@@ -6,7 +6,7 @@ metadata:
     app: mongodb-sts
 spec:
   serviceName: mongodb-service
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: mongodb
@@ -15,6 +15,13 @@ spec:
       labels:
         app: mongodb
     spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: express-app
       containers:
         - name: myapp-mongodb
           image: mongo
@@ -36,16 +43,6 @@ spec:
           volumeMounts:
             - name: mypvc
               mountPath: /data/db
-      # affinity:
-      #   podAntiAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #       - labelSelector:
-      #           matchExpressions:
-      #             - key: app
-      #               operator: In
-      #               values:
-      #                 - mongodb
-      #         topologyKey: "topology.kubernetes.io/zone"
       # Mongo Secret code is ommited due to brevity.
   volumeClaimTemplates:
     - metadata:
