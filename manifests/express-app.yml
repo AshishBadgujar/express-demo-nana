@@ -45,23 +45,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: express-app-service-0
+  name: express-app-service
 spec:
   selector:
     app: express-app
-    pod-index: "0"
-  ports:
-    - port: 3000
-      targetPort: 3000
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: express-app-service-1
-spec:
-  selector:
-    app: express-app
-    pod-index: "1"
   ports:
     - port: 3000
       targetPort: 3000
